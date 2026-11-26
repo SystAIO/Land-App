@@ -13,7 +13,9 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_DEMO_MODE": "false"
+        "EXPO_PUBLIC_DEMO_MODE": "false",
+        "EXPO_PUBLIC_API_BASE_URL": "http://estately.duckdns.org",
+        "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY": "AIzaSyAJTrt69XN1VOYXTCXIghuwIZ4YknkeTLM"
       }
     },
     "production": {
@@ -21,7 +23,9 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "EXPO_PUBLIC_DEMO_MODE": "false"
+        "EXPO_PUBLIC_DEMO_MODE": "false",
+        "EXPO_PUBLIC_API_BASE_URL": "http://estately.duckdns.org",
+        "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY": "AIzaSyAJTrt69XN1VOYXTCXIghuwIZ4YknkeTLM"
       }
     }
   },
