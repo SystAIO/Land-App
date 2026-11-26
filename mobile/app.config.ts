@@ -31,6 +31,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     package: "com.systio.land",
     versionCode: 1,
+    // Allows the app to talk to the backend over http:// while the DuckDNS
+    // domain has no TLS certificate yet (https works too once certbot is set up).
+    usesCleartextTraffic: true,
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#173A5E",

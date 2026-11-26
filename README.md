@@ -46,6 +46,13 @@ To use Supabase, Razorpay, and real OTP, configure the following environment var
 2. Run `backend/db/seed.sql` to create the admin account (`admin@systio.land` / `Admin@123`).
 3. If resetting everything, run `backend/db/reset.sql` first (wipes all app data).
 
+### Production deployment (self-hosted PostgreSQL + DuckDNS)
+
+A separate, plain-script deployment setup lives in [`deploy/`](deploy/README.md). It installs the
+backend on an Ubuntu server with its own PostgreSQL database, PM2 process and nginx site, and keeps
+the mobile app pointed at a DuckDNS hostname. Follow `deploy/README.md` for the server commands,
+DuckDNS domain/token setup and the mobile `EXPO_PUBLIC_API_BASE_URL` value.
+
 ### Razorpay
 
 1. Create a Razorpay account and obtain the Key ID and Key Secret.
