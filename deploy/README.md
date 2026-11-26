@@ -34,7 +34,7 @@ deploy/
 ## 1. Create the DuckDNS domain (do this first)
 
 1. Go to <https://www.duckdns.org> and sign in with Google / Reddit / GitHub.
-2. Add a domain, e.g. `systio-land` → full hostname `systio-land.duckdns.org`.
+2. Add the domain `estately` → full hostname `estately.duckdns.org`.
 3. Copy the **token** shown on the page. It is a secret — treat it like a password.
 4. Make sure port 80 is open on the server (the existing `pagalpagal` site already uses it, so it is).
 
@@ -85,7 +85,7 @@ In `mobile/.env` (gitignored) set:
 
 ```dotenv
 EXPO_PUBLIC_DEMO_MODE=false
-EXPO_PUBLIC_API_BASE_URL=http://systio-land.duckdns.org
+EXPO_PUBLIC_API_BASE_URL=http://estately.duckdns.org
 ```
 
 `mobile/app.config.ts` already sets `android.usesCleartextTraffic: true`, which is required
@@ -99,7 +99,7 @@ for an `http://` API URL on Android. Restart Expo / rebuild the APK after changi
 In the Razorpay dashboard set the webhook URL to:
 
 ```
-http://systio-land.duckdns.org/payments/webhook
+http://estately.duckdns.org/payments/webhook
 ```
 
 and copy the signing secret into `RAZORPAY_WEBHOOK_SECRET` in `deploy.env`, then re-run
@@ -112,10 +112,10 @@ DuckDNS only updates DNS — it does not provide certificates. Once the hostname
 ```bash
 sudo apt-get install -y certbot python3-certbot-nginx
 sudo ufw allow 443/tcp
-sudo certbot --nginx -d systio-land.duckdns.org
+sudo certbot --nginx -d estately.duckdns.org
 ```
 
-Then switch `EXPO_PUBLIC_API_BASE_URL` to `https://systio-land.duckdns.org`,
+Then switch `EXPO_PUBLIC_API_BASE_URL` to `https://estately.duckdns.org`,
 and update the Razorpay webhook URL to `https://...`.
 
 ## 7. Routine operations
@@ -138,7 +138,7 @@ sudo -u postgres pg_dump land_app | gzip > /root/backups/land_app-$(date +%F).sq
 ## Troubleshooting
 
 - `curl http://127.0.0.1:3000/health` on the server must return `{"ok":true,...}`.
-- If DNS has not propagated, `dig +short systio-land.duckdns.org` should show `129.121.186.158`.
+- If DNS has not propagated, `dig +short estately.duckdns.org` should show `129.121.186.158`.
 - `nginx -t` validates the site config; `systemctl reload nginx` applies it.
 - `pm2 restart land-app` after changing `backend/.env`.
 - Requests to the server IP still hit the existing `pagalpagal` app — that is expected.
