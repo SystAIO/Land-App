@@ -43,6 +43,10 @@ done
 
 # Generated values are hex-only, so they are safe in URLs and SQL literals.
 DB_PASSWORD="${DB_PASSWORD:-$(openssl rand -hex 24)}"
+if [[ "$DB_PASSWORD" == *"'"* ]]; then
+  echo "ERROR: DB_PASSWORD must not contain a single quote (use hex characters)." >&2
+  exit 1
+fi
 JWT_SECRET="${JWT_SECRET:-$(openssl rand -hex 32)}"
 if (( ${#JWT_SECRET} < 32 )); then
   echo "ERROR: JWT_SECRET must be at least 32 characters." >&2
@@ -83,18 +87,16 @@ npm ci
 npm run build
 
 echo "==> Configuring PostgreSQL"
-sudo -u postgres psql -v ON_ERROR_STOP=1 \
-  -v db_role="$DB_USER" -v db_pass="$DB_PASSWORD" <<'SQL'
-DO $$
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'db_role') THEN
-    CREATE ROLE :"db_role" LOGIN PASSWORD :'db_pass';
-  ELSE
-    ALTER ROLE :"db_role" WITH LOGIN PASSWORD :'db_pass';
-  END IF;
-END
-$$;
-SQL
+# psql does not interpolate -v variables inside dollar-quoted blocks, and
+# DB_USER / DB_PASSWORD are validated/generated above (safe SQL literals).
+if sudo -u postgres psql -Atqc \
+  "SELECT 1 FROM pg_roles WHERE rolname = '$DB_USER'" | grep -q 1; then
+  sudo -u postgres psql -v ON_ERROR_STOP=1 \
+    -c "ALTER ROLE $DB_USER WITH LOGIN PASSWORD '$DB_PASSWORD'"
+else
+  sudo -u postgres psql -v ON_ERROR_STOP=1 \
+    -c "CREATE ROLE $DB_USER LOGIN PASSWORD '$DB_PASSWORD'"
+fi
 
 if ! sudo -u postgres psql -Atqc \
   "SELECT 1 FROM pg_database WHERE datname = '$DB_NAME'" | grep -q 1; then

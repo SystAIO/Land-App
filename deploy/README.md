@@ -24,7 +24,7 @@ deploy/
 |---|---|
 | App directory | `/var/www/Land-App` (git clone of `SystAIO/Land-App`) |
 | Backend | `/var/www/Land-App/backend`, built with `npm ci && npm run build` |
-| Runtime | Node 22 + PM2 process named `land-app` (port **3000**, localhost only) |
+| Runtime | Node 22 + PM2 process named `land-app` (port **3000**, blocked from the internet by `ufw`) |
 | Database | PostgreSQL database `land_app`, role `landapp`, schema from `backend/db/schema.sql` |
 | Secrets | `/var/www/Land-App/backend/.env` (mode 600) |
 | nginx | `/etc/nginx/sites-available/land-app` → `server_name <duckdns-domain>` → `127.0.0.1:3000` |

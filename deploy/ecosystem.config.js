@@ -11,6 +11,9 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
       },
+      env_production: {
+        NODE_ENV: 'production',
+      },
       out_file: '/var/log/land-app/out.log',
       error_file: '/var/log/land-app/error.log',
       merge_logs: true,
