@@ -1,0 +1,15 @@
+{
+  "name": "systio-land",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SystIO Land — property marketplace app (Expo + Node/Express + Supabase Postgres + Razorpay)",
+  "scripts": {
+    "start": "npm --prefix mobile run start",
+    "android": "npm --prefix mobile run android",
+    "ios": "npm --prefix mobile run ios",
+    "typecheck": "npm --prefix mobile run typecheck",
+    "backend": "npm --prefix backend run start",
+    "build:apk": "npm --prefix mobile run build:apk",
+    "build:aab": "npm --prefix mobile run build:aab"
+  }
+}
