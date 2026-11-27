@@ -23,6 +23,8 @@ export interface AppConfig {
   jwtSecret: string;
   msg91Authkey: string | null;
   msg91TemplateId: string | null;
+  testOtpEnabled: boolean;
+  testOtp: string;
   razorpayKeyId: string;
   razorpayKeySecret: string;
   razorpayWebhookSecret: string | null;
@@ -37,6 +39,9 @@ const config: AppConfig = {
   jwtSecret: process.env.JWT_SECRET as string,
   msg91Authkey: process.env.MSG91_AUTHKEY || null,
   msg91TemplateId: process.env.MSG91_TEMPLATE_ID || null,
+  // Temporary test OTP bypass. Off by default; enable only for staging/testing.
+  testOtpEnabled: process.env.TEST_OTP_ENABLED === 'true',
+  testOtp: process.env.TEST_OTP || '123456',
   razorpayKeyId: process.env.RAZORPAY_KEY_ID as string,
   razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET as string,
   razorpayWebhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET || null,

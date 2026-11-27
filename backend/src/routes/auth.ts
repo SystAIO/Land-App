@@ -27,6 +27,14 @@ router.post(
         .status(400)
         .json({ error: 'A valid 10-digit Indian mobile number is required' });
     }
+    // Test mode: no SMS provider needed. The app receives a requestId and can
+    // verify with the fixed TEST_OTP code. Disabled unless explicitly enabled.
+    if (config.testOtpEnabled) {
+      return res.json({
+        message: 'OTP sent (test mode)',
+        requestId: `test-${config.testOtp}`,
+      });
+    }
     if (!config.msg91Authkey || !config.msg91TemplateId) {
       return res.status(503).json({ error: 'SMS service is not configured.' });
     }
@@ -77,26 +85,29 @@ router.post(
     if (!requestId) {
       return res.status(400).json({ error: 'Please request an OTP first.' });
     }
-    if (!config.msg91Authkey) {
-      return res.status(503).json({ error: 'SMS service is not configured.' });
-    }
+    const useTestOtp = config.testOtpEnabled && otp === config.testOtp;
+    if (!useTestOtp) {
+      if (!config.msg91Authkey) {
+        return res.status(503).json({ error: 'SMS service is not configured.' });
+      }
 
-    const verifyUrl = `https://control.msg91.com/api/v5/verify?requestId=${encodeURIComponent(
-      requestId
-    )}&otp=${encodeURIComponent(otp)}`;
-    const response = await fetch(verifyUrl, { headers: { authkey: config.msg91Authkey } });
-    const data = (await response.json().catch(() => null)) as
-      | { type?: string; message?: string }
-      | null;
+      const verifyUrl = `https://control.msg91.com/api/v5/verify?requestId=${encodeURIComponent(
+        requestId
+      )}&otp=${encodeURIComponent(otp)}`;
+      const response = await fetch(verifyUrl, { headers: { authkey: config.msg91Authkey } });
+      const data = (await response.json().catch(() => null)) as
+        | { type?: string; message?: string }
+        | null;
 
-    const ok =
-      response.ok &&
-      data !== null &&
-      (data.type === 'success' || /verified/i.test(data.message ?? ''));
+      const ok =
+        response.ok &&
+        data !== null &&
+        (data.type === 'success' || /verified/i.test(data.message ?? ''));
 
-    if (!ok) {
-      console.error('MSG91 verify failed', response.status, data);
-      return res.status(400).json({ error: 'Invalid or expired OTP. Please try again.' });
+      if (!ok) {
+        console.error('MSG91 verify failed', response.status, data);
+        return res.status(400).json({ error: 'Invalid or expired OTP. Please try again.' });
+      }
     }
 
     const profile = await withTransaction(async (client) => {

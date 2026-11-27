@@ -91,8 +91,11 @@ EXPO_PUBLIC_API_BASE_URL=http://estately.duckdns.org
 `mobile/app.config.ts` already sets `android.usesCleartextTraffic: true`, which is required
 for an `http://` API URL on Android. Restart Expo / rebuild the APK after changing this.
 
-> User OTP login returns `503 SMS service is not configured` until `MSG91_*` are filled in
-> and `setup-server.sh` is re-run. The seeded admin login works immediately.
+> User OTP login returns `503 SMS service is not configured` until `MSG91_*` are filled in.
+> For testing without an SMS provider, set `TEST_OTP_ENABLED=true` (optional `TEST_OTP=123456`)
+> in `deploy.env`, re-run `setup-server.sh`, and any valid Indian mobile number can sign in
+> with that fixed code. **Turn this off before a public release.**
+> The seeded admin login works immediately.
 
 ## 5. Razorpay webhook
 
