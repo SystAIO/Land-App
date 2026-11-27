@@ -127,6 +127,10 @@ sudo bash /var/www/Land-App/deploy/scripts/update.sh
 # Smoke test
 sudo bash /var/www/Land-App/deploy/scripts/smoke.sh
 
+# Load the APK's demo dataset (owners, 12 listings, 6 payments) into PostgreSQL.
+# Safe to re-run; only its own rows are replaced. No app rebuild needed.
+sudo bash /var/www/Land-App/deploy/scripts/seed-demo.sh
+
 # Logs
 pm2 logs land-app
 tail -f /var/log/land-app/duckdns.log
